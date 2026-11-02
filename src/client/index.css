@@ -1,0 +1,239 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/noto-sans-bengali";
+
+/*
+ * Dark mode is one more palette (Night), picked by hand like the others. Nothing follows the OS
+ * setting. The `dark` variant below is kept only so the `dark:` classes inside shadcn components
+ * never match (nothing sets `.dark`); without it Tailwind would apply them under the OS dark setting.
+ */
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Palette tokens (Quiet Utility). Every palette fills the same roles:
+ *   app / surface / tint / chip    neutral ground (tinted toward the hue), panel, hover fill, secondary fill
+ *   ink / soft / faint / body      text tiers (body = running text)
+ *   line                           hairline for dividers only (decorative, not contrast-checked)
+ *   edge                           border of controls, at least 3:1 against app, surface and tint
+ *   brand / primary                the one accent (primary = brand, kept as a separate name for shadcn)
+ *   brand-soft                     light brand fill for selected and current rows
+ *   danger                         errors and destructive actions
+ *   bar                            the ground color again, read by `<meta name="theme-color">`
+ *   deep                           the overlay (scrim) behind sheets and dialogs, used at 40%; always dark
+ * The default palette (Ocean Teal) lives here; every other palette is a `:root[data-theme="<id>"]`
+ * block below that overrides the same variables. `static` keeps the variables in the output even when
+ * a utility does not use them yet. `--color-primary` and `--color-primary-foreground` double as the
+ * shadcn utilities of the same name. `--color-brand` is the accent token (focus ring, progress). It is
+ * not called `accent` because shadcn's `accent` is a subtle hover background, which maps to `tint`.
+ * `themes.test.ts` checks that every block has every role; contrast is checked per palette (see the
+ * build plan's contrast pass).
+ */
+@theme static {
+  --color-app: #f4f6f5;
+  --color-surface: #ffffff;
+  --color-tint: #ebf0ee;
+  --color-chip: #e0ebe8;
+  --color-brand-soft: #d9eeea;
+  --color-ink: #14201e;
+  --color-soft: #3d514e;
+  --color-faint: #5b6d69;
+  --color-body: #14201e;
+  --color-deep: #14201e;
+  --color-line: #e0e6e4;
+  --color-edge: #74857f;
+  --color-brand: #0e7367;
+  --color-primary: #0e7367;
+  --color-primary-foreground: #ffffff;
+  --color-danger: #b3261e;
+  --color-bar: #f4f6f5;
+
+  /*
+   * Two radii, decided once: controls (buttons, inputs, selects, badges, checkboxes, menu items) and
+   * panels (cards, sheets, dialogs, popups). Nothing in between.
+   */
+  --radius-control: 0.375rem;
+  --radius-panel: 0.625rem;
+
+  /*
+   * The only shadow: layers that float (sheet, dialog, select popup, toast). Panels never get one.
+   * Tinted with `deep` (always dark), never `ink`, which is light in Night and would glow. Tailwind
+   * inlines this value into the utility, so a palette cannot override it here; change `deep` instead.
+   */
+  --shadow-float: 0 8px 24px -6px color-mix(in oklab, var(--color-deep) 22%, transparent);
+}
+
+/* Bordeaux (id: red-gradient) */
+:root[data-theme="red-gradient"] {
+  --color-app: #f7f3f3;
+  --color-surface: #ffffff;
+  --color-tint: #f1e9ea;
+  --color-chip: #ecdcde;
+  --color-brand-soft: #f6e0e2;
+  --color-ink: #2e1014;
+  --color-soft: #5a3a40;
+  --color-faint: #7a5a60;
+  --color-body: #2e1014;
+  --color-deep: #2e1014;
+  --color-line: #e9dfe0;
+  --color-edge: #8f7a7d;
+  --color-brand: #9b1b30;
+  --color-primary: #9b1b30;
+  --color-primary-foreground: #ffffff;
+  --color-danger: #b42318;
+  --color-bar: #f7f3f3;
+}
+
+/* Cherry Blossom (id: cherry-blossom) */
+:root[data-theme="cherry-blossom"] {
+  --color-app: #fbf4f5;
+  --color-surface: #ffffff;
+  --color-tint: #f6e9ec;
+  --color-chip: #f3d9df;
+  --color-brand-soft: #fde2e8;
+  --color-ink: #3a0f1c;
+  --color-soft: #5f3a46;
+  --color-faint: #7d5964;
+  --color-body: #3a0f1c;
+  --color-deep: #3a0f1c;
+  --color-line: #f0e0e4;
+  --color-edge: #927780;
+  --color-brand: #b0123f;
+  --color-primary: #b0123f;
+  --color-primary-foreground: #ffffff;
+  --color-danger: #b42318;
+  --color-bar: #fbf4f5;
+}
+
+/* Cherry Red (id: cherry-red) */
+:root[data-theme="cherry-red"] {
+  --color-app: #f3f4f4;
+  --color-surface: #ffffff;
+  --color-tint: #eaecec;
+  --color-chip: #e0e3e3;
+  --color-brand-soft: #fde6e9;
+  --color-ink: #1a1a1a;
+  --color-soft: #4b4f53;
+  --color-faint: #63676b;
+  --color-body: #1a1a1a;
+  --color-deep: #1a1a1a;
+  --color-line: #e1e4e5;
+  --color-edge: #80868b;
+  --color-brand: #d6001f;
+  --color-primary: #d6001f;
+  --color-primary-foreground: #ffffff;
+  --color-danger: #b42318;
+  --color-bar: #f3f4f4;
+}
+
+/* Night (id: night): the dark palette. Cool charcoal, mint-teal accent, dark text on primary. */
+:root[data-theme="night"] {
+  color-scheme: dark;
+  --color-app: #121716;
+  --color-surface: #1a201f;
+  --color-tint: #232a29;
+  --color-chip: #2a3331;
+  --color-brand-soft: #173c37;
+  --color-ink: #e6edeb;
+  --color-soft: #b4c1bd;
+  --color-faint: #8f9c98;
+  --color-body: #e6edeb;
+  --color-deep: #030505;
+  --color-line: #2b3331;
+  --color-edge: #7d8d89;
+  --color-brand: #5cc4b4;
+  --color-primary: #5cc4b4;
+  --color-primary-foreground: #0b1312;
+  --color-danger: #ff8a80;
+  --color-bar: #121716;
+}
+
+/* shadcn utilities read the shadcn variables below, which are aliases of the palette tokens. */
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: "Geist Variable", "Noto Sans Bengali Variable", sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: var(--color-app);
+  --foreground: var(--color-body);
+  --card: var(--color-surface);
+  --card-foreground: var(--color-body);
+  --popover: var(--color-surface);
+  --popover-foreground: var(--color-body);
+  --primary: var(--color-primary);
+  --primary-foreground: var(--color-primary-foreground);
+  --secondary: var(--color-chip);
+  --secondary-foreground: var(--color-ink);
+  --muted: var(--color-tint);
+  --muted-foreground: var(--color-soft);
+  --accent: var(--color-tint);
+  --accent-foreground: var(--color-ink);
+  --destructive: var(--color-danger);
+  --border: var(--color-line);
+  --input: var(--color-edge);
+  --ring: var(--color-brand);
+  --chart-1: var(--color-brand);
+  --chart-2: var(--color-soft);
+  --chart-3: var(--color-faint);
+  --chart-4: var(--color-edge);
+  --chart-5: var(--color-chip);
+  --radius: 0.625rem;
+  --sidebar: var(--color-surface);
+  --sidebar-foreground: var(--color-body);
+  --sidebar-primary: var(--color-primary);
+  --sidebar-primary-foreground: var(--color-primary-foreground);
+  --sidebar-accent: var(--color-tint);
+  --sidebar-accent-foreground: var(--color-ink);
+  --sidebar-border: var(--color-line);
+  --sidebar-ring: var(--color-brand);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}

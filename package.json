@@ -1,0 +1,77 @@
+{
+  "name": "unilink",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare": "vp config",
+    "start:preview": "vp preview",
+    "cf:types": "wrangler types",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply DB --local",
+    "db:migrate:staging": "wrangler d1 migrations apply DB --env staging --remote",
+    "db:migrate:prod": "wrangler d1 migrations apply DB --env production --remote",
+    "deploy:staging": "CLOUDFLARE_ENV=staging vp build && wrangler deploy",
+    "deploy:prod": "CLOUDFLARE_ENV=production vp build && wrangler deploy",
+    "seed": "node scripts/seed.ts",
+    "faculty:sql": "node scripts/faculty-sql.ts",
+    "seed:admin": "node scripts/seed-admin.ts --local",
+    "seed:admin:staging": "node scripts/seed-admin.ts --staging",
+    "seed:admin:prod": "node scripts/seed-admin.ts --prod",
+    "push:keys": "node scripts/generate-vapid.ts"
+  },
+  "dependencies": {
+    "@base-ui/react": "1.9.0",
+    "@block65/webcrypto-web-push": "2.0.0",
+    "@fontsource-variable/geist": "5.3.0",
+    "@fontsource-variable/noto-sans-bengali": "^5.3.0",
+    "@hono/zod-validator": "0.9.1",
+    "@hookform/resolvers": "5.9.2",
+    "@tailwindcss/vite": "4.3.3",
+    "@tanstack/react-query": "5.104.3",
+    "@tanstack/react-router": "1.170.45",
+    "class-variance-authority": "0.7.1",
+    "cn": "0.5.0",
+    "drizzle-orm": "0.45.4",
+    "hono": "4.13.13",
+    "lucide-react": "1.59.0",
+    "next-themes": "0.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-hook-form": "7.90.0",
+    "shadcn": "4.22.0",
+    "sonner": "2.0.8",
+    "tailwindcss": "4.3.3",
+    "tw-animate-css": "1.4.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "1.64.0",
+    "@cloudflare/vitest-plugin": "1.4.4",
+    "@tanstack/router-plugin": "1.168.47",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/react": "16.3.3",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "drizzle-kit": "0.31.11",
+    "happy-dom": "21.0.3",
+    "typescript": "6.0.3",
+    "vite": "catalog:",
+    "vite-plugin-pwa": "2.0.0",
+    "vite-plus": "catalog:",
+    "workbox-window": "7.4.1",
+    "wrangler": "4.151.1"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.14.0",
+      "onFail": "download"
+    }
+  },
+  "engines": {
+    "node": "24.22.0"
+  }
+}
